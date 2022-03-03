@@ -18,7 +18,7 @@ else
 	mkdir $path
 fi
 
-#Get pid
+#Get pid,there we used evsserver,you can replace it to the progeress name
 evsserver_pid=`pidof evsserver`
 echo "current pid $evsserver_pid ,we will begin check memory"
 while true
