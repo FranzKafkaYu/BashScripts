@@ -14,51 +14,63 @@ redColor='\033[0;31m'
 greenColor='\033[0;32m'
 yellowColor='\033[0;33m'
 
+function LOGD() {
+    echo -e "${yellowColor}[DEG] $* ${plain}"
+}
+
+function LOGE() {
+    echo -e "${redColor}[ERR] $* ${plain}"
+}
+
+function LOGI() {
+    echo -e "${greenColor}[INF] $* ${plain}"
+}
+
 #Check whether you are root
-echo "${yellowColor}**********************Root Check********************${plain}"
+LOGD "**********************Root Check********************"
 currentUser=$(whoami)
 #more simple way:[[ $EUID -ne 0 ]],if true suggest you are root or you are not
 #currentUser=$(whoami)
-echo "currentUser is $currentUser"
+LOGD "currentUser is $currentUser"
 if [ $currentUser != "root" ]; then
-    echo -e "${redColor}Attention:请检查是否为root用户,please check whether you are root ${plain}\n"
+    LOGE "$Attention:请检查是否为root用户,please check whether you are root"
     exit 1
 fi
 
 currentPath=$(pwd)
-echo "currentPath is $currentPath"
+LOGD "currentPath is $currentPath"
 if [ currentPath != "/root" ]; then
-    echo "Need change work directory to /root"
+    LOGD "Need change work directory to /root"
     cd /root
 fi
 
-echo "${yellowColor}**********************Install Acme******************${plain}"
+LOGD "**********************Install Acme******************"
 curl https://get.acme.sh | sh
 
 #Check curl cmd whether succeed
 if [ $? -ne 0 ]; then
-    echo -e "${redColor}Couldn't get acme shell script,please check your network here${plain}"
+    LOGE "Couldn't get acme shell script,please check your network here"
     exit 1
 fi
 #Cloudflare setup
-echo "${yellowColor}*********************Env   Setup*********************${plain}"
+LOGD "*********************Env   Setup*********************"
 CF_GlobalKey=""
 CF_AccountEmail=""
 CF_Domain=""
-echo "${yellowColor}***********please setup your domain name*************${plain}"
-read -p "Input you domain here:" CF_Domain
-echo "${yellowColor}Your domian name is -> ${CF_Domain} ${plain}"
-echo "${yellowColor}*********please setup cloudflare golbal key**********${plain}"
-read -p "Input you key here:" CF_GlobalKey
-echo "${yellowColor}Your Global Key is -> ${CF_GlobalKey} ${plain}"
-echo "${yellowColor}*******please setup cloudflare account email*********${plain}"
-read -p "Input you email here:" CF_AccountEmail
-echo "Your Account Email is -> ${CF_AccountEmail}"
+LOGD "***********please setup your domain name*************"
+read -p "Input your domain here:" CF_Domain
+LOGD "Your domian name is -> ${CF_Domain} "
+LOGD "*********please setup cloudflare golbal key**********"
+read -p "Input your key here:" CF_GlobalKey
+LOGD "Your Global Key is -> ${CF_GlobalKey}"
+LOGD "*******please setup cloudflare account email*********"
+read -p "Input your email here:" CF_AccountEmail
+LOGD "Your Account Email is -> ${CF_AccountEmail}"
 #Change acme default CA to cloudflare
-echo "${yellowColor}******************Change Default CA******************${plain}"
+LOGD "******************Change Default CA******************"
 ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 if [ $? -ne 0 ]; then
-    echo -e "${redColor}Change default CA failed${plain}"
+    LOGE "Change default CA failed"
     exit 1
 fi
 #Create /root/cert directory
@@ -72,12 +84,12 @@ fi
 #Issue a cert,here is wildcard cert
 export CF_Key="${CF_GlobalKey}"
 export CF_Email=${CF_AccountEmail}
-echo "${yellowColor}Export CF_Key is $CF_Key ${plain}"
-echo "${yellowColor}Export CF_Email is $CF_Email ${plain}"
+LOGD "Export CF_Key is $CF_Key "
+LOGD "${yellowColor}Export CF_Email is $CF_Email "
 ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${CF_Domain} -d *.${CF_Domain}
 
 if [ $? -ne 0 ]; then
-    echo -e "${redColor}issue cert failed,please check your input${plain}"
+    LOGE "issue cert failed,please check your input"
     exit 1
 fi
 #Install your certs
@@ -86,7 +98,7 @@ fi
     --fullchain-file /root/cert/fullchain.cer
 
 if [ $? -ne 0 ]; then
-    echo -e "${redColor}issue cert failed,please check acme output${plain}"
+    LOGE "${redColor}issue cert failed,please check acme output"
     exit 1
 fi
 
@@ -94,10 +106,9 @@ fi
 ~/.acme.sh/acme.sh --upgrade --auto-upgrade
 
 if [ $? -ne 0 ]; then
-    echo "${redColor}Setup Auto Upgrade failed,please check acme output here${plain}"
+    LOGE "Setup Auto Upgrade failed,please check acme output here"
     exit 1
 else
-    echo "${greenColor}Your cert has been installed successfully,details as follows:"
+    LOGI "Your cert has been installed successfully,details as follows:"
     ls -lah cert
-    echo "${plain}"
 fi
