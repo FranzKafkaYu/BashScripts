@@ -10,6 +10,6 @@ echo "Today is $timeStamp"
 echo "top cmd result is $topCmd"
 message=$(netstat -plunt && top -o %MEM|head -n 10)
 echo "This is information $message"
-token=1967463006:AAGBWvbOivUXEZM067Zg5Wy2aNsRgfsEzvc
-id=1871098318
+token=********************************************
+id=**********
 curl -s "https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}" --data-binary "&text=${message}"
