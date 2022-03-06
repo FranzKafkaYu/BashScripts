@@ -39,7 +39,7 @@ fi
 
 currentPath=$(pwd)
 LOGD "currentPath is $currentPath"
-if [ currentPath != "/root" ]; then
+if [ $currentPath != "/root" ]; then
     LOGD "Need change work directory to /root"
     cd /root
 fi
