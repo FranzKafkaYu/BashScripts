@@ -12,3 +12,4 @@
 3.  该脚本所使用的证书CA方为Let‘sEncrypt，暂不支持其他CA方
 
 4.  该脚本所使用的证书申请模式为DNS，利用DNS解析服务提供商提供的API进行解析。
+5.  使用方法：bash <(curl -Ls https://raw.githubusercontent.com/FranzKafkaYu/BashScripts/main/SSLAutoInstall/SSLAutoInstall.sh)
