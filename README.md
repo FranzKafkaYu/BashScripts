@@ -1,2 +1,2 @@
-# Bash_Script
+# BashScript
 This is my own bash script excerises.
