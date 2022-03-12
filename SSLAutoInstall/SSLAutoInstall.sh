@@ -57,13 +57,13 @@ LOGD "*********************Env   Setup*********************"
 CF_GlobalKey=""
 CF_AccountEmail=""
 CF_Domain=""
-LOGD "***********please setup your domain name*************"
+LOGD "******please setup your domain name,请设置域名*********"
 read -p "Input your domain here:" CF_Domain
 LOGD "Your domian name is -> ${CF_Domain} "
-LOGD "*********please setup cloudflare golbal key**********"
+LOGD "***please setup cloudflare golbal key,请设置API密钥****"
 read -p "Input your key here:" CF_GlobalKey
 LOGD "Your Global Key is -> ${CF_GlobalKey}"
-LOGD "*******please setup cloudflare account email*********"
+LOGD "**please setup cloudflare account email,请设置注册邮箱**"
 read -p "Input your email here:" CF_AccountEmail
 LOGD "Your Account Email is -> ${CF_AccountEmail}"
 #Change acme default CA to cloudflare
@@ -86,7 +86,7 @@ export CF_Key="${CF_GlobalKey}"
 export CF_Email=${CF_AccountEmail}
 LOGD "Export CF_Key is $CF_Key "
 LOGD "${yellowColor}Export CF_Email is $CF_Email "
-~/.acme.sh/acme.sh --issue --dns dns_cf -d ${CF_Domain} -d *.${CF_Domain}
+~/.acme.sh/acme.sh --issue --dns dns_cf -d ${CF_Domain} -d *.${CF_Domain} --log
 
 if [ $? -ne 0 ]; then
     LOGE "issue cert failed,please check your input"
@@ -101,6 +101,9 @@ if [ $? -ne 0 ]; then
     LOGE "${redColor}issue cert failed,please check acme output"
     exit 1
 fi
+
+#chmod 755
+chmod 755 $certPath
 
 #Setup auto upgrade
 ~/.acme.sh/acme.sh --upgrade --auto-upgrade
