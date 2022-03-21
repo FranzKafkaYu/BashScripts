@@ -1,4 +1,3 @@
-![Customized Card](https://github-readme-stats.vercel.app/api/pin?username=FranzKafkaYu&repo=github-readme-stats&title_color=fff&icon_color=f9f9f9&text_color=9f9f9f&bg_color=151515)  
 中文版介绍：
 这是我的个人常用的一些脚本集合，通过这些脚本，我一边学习Linux知识一边方便我个人的使用，以下是关于这些脚本的一些摘要。
 
