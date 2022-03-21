@@ -1,5 +1,5 @@
+![Customized Card](https://github-readme-stats.vercel.app/api/pin?username=FranzKafkaYu&repo=github-readme-stats&title_color=fff&icon_color=f9f9f9&text_color=9f9f9f&bg_color=151515)  
 中文版介绍：
-
 这是我的个人常用的一些脚本集合，通过这些脚本，我一边学习Linux知识一边方便我个人的使用，以下是关于这些脚本的一些摘要。
 
 1.  FileManuplite：该脚本主要用于定时删除xray/v2ray中产生的日志，当他们超过特定大小时就会删除日志同时重启进程
