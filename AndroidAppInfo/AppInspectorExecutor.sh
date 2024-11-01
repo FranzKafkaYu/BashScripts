@@ -64,14 +64,18 @@ function getAppMemoryInfo() {
 }
 
 function getAppCpuInfo() {
+    //NOTE:here we may find multi progress in Android with same progress name
+    local pid=$(pidof ${APP_PROCESS_NAME})
     echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
-    echo "dumpsys cpuinfo begin" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
-    dumpsys cpuinfo | grep ${APP_PROCESS_NAME} >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
-    echo "dumpsys cpuinfo end" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    echo "get cpu usage begin" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    top -b -n 1 | grep -E 'PID|e.unity3d' >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    echo "get cpu usage end" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    echo "each thread usage begin" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    top -b -H -p ${pid} -n 1 | sed 's/\x1b\[[0-9;]*m//g' >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    echo "each thread usage end" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
     echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
 }
-
-
 
 function main() {
     disableSelinux
