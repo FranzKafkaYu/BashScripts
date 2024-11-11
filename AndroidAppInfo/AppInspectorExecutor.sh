@@ -24,7 +24,7 @@ function createResultDir() {
 
 function getAppLocation() {
     echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
-    APP_PACKAGE_LOCATION=$(pm path ${APP_PACKAGE_NAME} | cut -d ':' -f2)
+    APP_PACKAGE_LOCATION=$(pm list packages -a -f | grep ${APP_PACKAGE_NAME} | sed 's/package://' | awk -F '=com.example.smartscene' '{print $1}')
     echo "name ${APP_PACKAGE_NAME} location:${APP_PACKAGE_LOCATION}" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
 }
 
@@ -68,7 +68,7 @@ function getAppCpuInfo() {
     local pid=$(pidof ${APP_PROCESS_NAME})
     echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
     echo "get cpu usage begin" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
-    top -b -n 1 | grep -E 'PID|e.unity3d' >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
+    top -b -n 1 | grep -E 'PID|${APP_PROCESS_NAME}' >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
     echo "get cpu usage end" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
     echo "---------------------------------------------" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
     echo "each thread usage begin" >> ${APP_INSPECTOR_RESULT_DIR}/${APP_INSPECTOR_RESULT_OUTPUT}
@@ -87,7 +87,7 @@ function main() {
     do
         getAppMemoryInfo
         getAppCpuInfo
-        sleep 5
+        sleep 10
     done
 
 }
