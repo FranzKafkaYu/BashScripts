@@ -3,7 +3,7 @@
 #constants
 APP_PACKAGE_NAME="com.example.smartscene"
 #NOTE:APP_PROCESS_NAME normally same as APP_PACKAGE_NAME，but if it defined in manifest：android.process 
-#the progress name will be changed
+#NOTE:AND the progress name will be changed
 APP_PROCESS_NAME="com.example.smartscene"
 APP_INSPECTOR_RESULT_DIR="/data/appinspector"
 APP_INSPECTOR_RESULT_OUTPUT="result.txt"
@@ -12,6 +12,24 @@ APP_INSPECTOR_RESULT_OUTPUT="result.txt"
 APP_APK_SIZE=""
 APP_PACKAGE_LOCATION=""
 
+#print version 
+function printVersion() {
+    echo "current version:${TOOL_VERSION}"
+}
+
+#如果之前存在执行中的进程，则需要kill掉
+function clearSession() {
+    local current_pid=$$
+    # 获取所有与当前脚本相同的进程，排除当前进程
+    local existing_pid=$(pgrep -f "AppInspectorExecutor.sh" | grep -v "^$" | grep -v "^$current_pid$")
+    #Kill掉旧进程
+    if [ -n "$existing_pid" ]; then
+        echo "killing progress: $existing_pid"
+        for pid in $existing_pid; do
+            kill -9 $pid
+        done
+    fi
+}
 
 function disableSelinux() {
     setenforce 0
